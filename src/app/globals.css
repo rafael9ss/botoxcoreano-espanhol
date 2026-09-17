@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FFFBF5;
+  --foreground: #171717;
+  --gold: #C5A059;
+  --gold-light: #E8C87A;
+  --cream: #FFFBF5;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+@layer utilities {
+  .bg-cream {
+    background-color: var(--cream);
+  }
+  .text-gold {
+    color: var(--gold);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.35s ease-out;
+}
+
+/* Soft scrollbar for testimonials */
+.max-h-48::-webkit-scrollbar {
+  width: 4px;
+}
+.max-h-48::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 4px;
+}
