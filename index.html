@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Gratuita - Botox Coreano Manual</title>
+    <meta name="description" content="Descubre el protocolo ideal para rejuvenecer tu piel con el Botox Coreano Manual.">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Meta Pixel Code (disabled for this clone)
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'PIXEL_ID');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=PIXEL_ID&ev=PageView&noscript=1"
+/></noscript>
+End Meta Pixel Code -->
+</head>
+<body>
+    <div class="bg-animated"></div>
+    
+    <main class="app-container">
+        <!-- Back Button -->
+        <button class="back-btn hidden" id="backBtn" onclick="prevStep()" aria-label="Volver etapa">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </button>
+
+        <!-- Header with progress bar -->
+        <header class="app-header hidden" id="appHeader">
+            <img src="assets/botoxdesu.jfif" id="headerImg" alt="Quiz Logo" style="width: 100%; max-width: 150px; margin: 0 auto 15px auto; display: block; border-radius: 8px; mix-blend-mode: multiply;">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p class="step-indicator">Etapa <span id="currentStepNum">1</span> de 10</p>
+        </header>
+
+        <!-- Etapa 0: Carregamento e Validação Inicial -->
+        <section class="step active" id="step0">
+            <div class="init-header">
+                <img src="assets/botoxdesu.jfif" alt="Quiz Logo" class="init-logo">
+            </div>
+            <h1 class="init-title">Rejuvenece hasta 20 años en 28 días con el</h1>
+            <h2 class="init-subtitle">Botox Coreano Manual</h2>
+            
+            <div class="init-progress-container">
+                <div class="init-progress-bar" id="initProgressBar"></div>
+            </div>
+            <p class="init-loading-text">Cargando la evaluación...</p>
+
+            <div class="init-image-wrapper">
+                <img src="assets/imagedesu.png" alt="Antes y Después" class="init-ba-image">
+            </div>
+
+            <div class="init-testimonials-container mt-4">
+                <div class="init-testimonial-slider" id="initTestimonialSlider">
+                    <!-- Dinâmico via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Etapa 1: Idade -->
+        <section class="step" id="step1">
+            <h1 class="step-title h-animate">SELECCIONA TU EDAD</h1>
+            <p class="step-subtitle h-animate delay-1">Para personalizar tu plan de resultados</p>
+            <div class="options-grid two-col o-animate delay-2">
+                <button class="option-card with-img" onclick="nextStep(2, 'idade', '20-29')">
+                    <div class="img-wrapper">
+                        <img src="assets/velha_20.jpg" alt="Mujer 20-29 años" class="option-img">
+                    </div>
+                    <span>20-29</span>
+                </button>
+                <button class="option-card with-img" onclick="nextStep(2, 'idade', '30-39')">
+                    <div class="img-wrapper">
+                        <img src="assets/velha_30.jpg" alt="Mujer 30-39 años" class="option-img">
+                    </div>
+                    <span>30-39</span>
+                </button>
+                <button class="option-card with-img" onclick="nextStep(2, 'idade', '40-49')">
+                    <div class="img-wrapper">
+                        <img src="assets/velha_40.jpg" alt="Mujer 40-49 años" class="option-img">
+                    </div>
+                    <span>40-49</span>
+                </button>
+                <button class="option-card with-img" onclick="nextStep(2, 'idade', '50+')">
+                    <div class="img-wrapper">
+                        <img src="assets/velha_50.jpg" alt="Rostro de mujer mayor con cabello blanco" class="option-img">
+                    </div>
+                    <span>50+</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Etapa 2: Tipo de Pele -->
+        <section class="step" id="step2">
+            <h1 class="step-title">¿Cómo describirías tu piel?</h1>
+            <p class="step-subtitle">Esto nos ayuda a ajustar el plan ideal para tu tipo.</p>
+            <div class="options-list">
+                <button class="option-row" onclick="nextStep(3, 'pele', 'Normal')">
+                    <span class="emoji">😌</span> Normal
+                </button>
+                <button class="option-row" onclick="nextStep(3, 'pele', 'Grasa')">
+                    <span class="emoji">😕</span> Grasa
+                </button>
+                <button class="option-row" onclick="nextStep(3, 'pele', 'Seca')">
+                    <span class="emoji">😣</span> Seca
+                </button>
+                <button class="option-row" onclick="nextStep(3, 'pele', 'Mixta')">
+                    <span class="emoji">🤗</span> Mixta
+                </button>
+            </div>
+        </section>
+
+        <!-- Etapa 3: Objetivo -->
+        <section class="step" id="step3">
+            <h1 class="step-title">¿Cuál es tu principal objetivo?</h1>
+            <p class="step-subtitle">Con el Botox Coreano Manual</p>
+            <div class="options-list">
+                <button class="option-row" onclick="nextStep(4, 'objetivo', 'Sentirme más joven')">
+                    <span class="emoji">✨</span> Sentirme más joven
+                </button>
+                <button class="option-row" onclick="nextStep(4, 'objetivo', 'Bien y segura')">
+                    <span class="emoji">💃🏻</span> Volver a sentirme bien y segura
+                </button>
+                <button class="option-row" onclick="nextStep(4, 'objetivo', 'No parecer cansada')">
+                    <span class="emoji">🔋</span> No parecer siempre cansada
+                </button>
+                <button class="option-row" onclick="nextStep(4, 'objetivo', 'Recuperar autoestima')">
+                    <span class="emoji">💖</span> Recuperar mi autoestima
+                </button>
+            </div>
+        </section>
+
+        <!-- Etapa 4: Área de Foco -->
+        <section class="step" id="step4">
+            <h1 class="step-title">¿Qué área quieres mejorar primero?</h1>
+            <div class="split-layout">
+                <div class="split-image">
+                    <div class="focus-face-wrapper">
+                        <!-- Imagem de uma mulher de idade aproximada a 60 anos (utilizando o asset local age_50s) -->
+                        <img src="assets/leticia_52.jpg" alt="Áreas del rostro" class="focus-face-img">
+                        
+                        <div class="circle-marker cir-left"></div>
+                        <div class="circle-marker cir-above"></div>
+                        <div class="circle-marker cir-below"></div>
+                        <div class="circle-marker cir-between"></div>
+                    </div>
+                </div>
+                <div class="split-options options-list">
+                    <button class="option-row compact active-hover" onclick="nextStep(5, 'foco', 'Todo el rostro')">Todo el rostro</button>
+                    <button class="option-row compact" onclick="nextStep(5, 'foco', 'Frente')">Frente</button>
+                    <button class="option-row compact" onclick="nextStep(5, 'foco', 'Ojos')">Ojos</button>
+                    <button class="option-row compact" onclick="nextStep(5, 'foco', 'Mejillas')">Mejillas</button>
+                    <button class="option-row compact" onclick="nextStep(5, 'foco', 'Cuello')">Cuello</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Etapa 5: Prova Social -->
+        <section class="step" id="step5">
+            <h1 class="step-title highlight-text">Una piel firme y joven quedó más fácil</h1>
+            <p class="step-subtitle">Desliza hacia el lado para ver el resultado increíble de Leticia</p>
+            
+            <div class="ba-slider-container">
+                <div class="ba-slider" id="baSlider">
+                    <!-- Imagem do Depois (Mulher mais jovem com a pele limpa) -->
+                    <img src="assets/after_final.png" alt="Después" class="img-after">
+                    <!-- Imagem do Antes (Mulher mais velha/marcas de expressao) -->
+                    <img src="assets/before_final.png" alt="Antes" class="img-before" id="imgBeforeClipped">
+                    <div class="ba-slider-handle" id="baSliderHandle">
+                        <span class="arrows">◀▶</span>
+                    </div>
+                    <input type="range" class="ba-slider-input" min="0" max="100" value="50" oninput="updateBaSlider(this)">
+                </div>
+                <div class="ba-labels">
+                    <span class="label-antes">Antes</span>
+                    <span class="label-depois">Después</span>
+                </div>
+            </div>
+
+            <div class="init-testimonial-card mt-3">
+                <div class="init-testimonial-header">
+                    <strong>Leticia, 52 años</strong>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                </div>
+                <p class="init-testimonial-text">"¡Fueron solo 3 semanas haciendo el botox coreano manual y parece que volví a tener 30 años! Lo mejor es que lo hago en dos minutitos en mi propia habitación, me encantó el resultado ❤️"</p>
+            </div>
+            <button id="btnContinueStep5" class="primary-btn pulse-anim" onclick="nextStep(6, null, null)">Continuar</button>
+        </section>
+
+        <!-- Etapa 6: Tempo -->
+        <section class="step" id="step6">
+            <h1 class="step-title">¿Cuánto tiempo al día puedes dedicar?</h1>
+            <p class="step-subtitle">Tu plan se ajustará para caber en tu rutina</p>
+            <div class="options-list">
+                <button class="option-row" onclick="nextStep(7, 'tempo', 'Menos de 5 min')">
+                    <span class="emoji">🕛️</span> Menos de 5 minutos
+                </button>
+                <button class="option-row" onclick="nextStep(7, 'tempo', '5 a 15 min')">
+                    <span class="emoji">⏰️</span> De 5 a 15 minutos
+                </button>
+                <button class="option-row" onclick="nextStep(7, 'tempo', 'Más de 15 min')">
+                    <span class="emoji">🕰️</span> Más de 15 minutos
+                </button>
+            </div>
+        </section>
+
+        <!-- Etapa 7: Rotina -->
+        <section class="step" id="step7">
+            <h1 class="step-title">¿Ya tienes una rutina de cuidados para la piel?</h1>
+            <div class="options-list">
+                <button class="option-row" onclick="nextStep(8, 'rotina', 'Todos los días')">
+                    <span class="emoji">🤗</span> Sí, cuido todos los días
+                </button>
+                <button class="option-row" onclick="nextStep(8, 'rotina', 'Mayoría de los días')">
+                    <span class="emoji">😬</span> La mayoría de los días, pero a veces olvido
+                </button>
+                <button class="option-row" onclick="nextStep(8, 'rotina', 'A veces')">
+                    <span class="emoji">😩</span> Cuido a veces o cuando me acuerdo
+                </button>
+                <button class="option-row" onclick="nextStep(8, 'rotina', 'Nunca')">
+                    <span class="emoji">😕</span> Nunca sigo una rutina
+                </button>
+            </div>
+        </section>
+
+        <!-- Etapa 8: Gráfico / Promessa -->
+        <section class="step" id="step8">
+            <h1 class="step-title highlight-text">El único programa que necesitas</h1>
+            <p class="step-subtitle">Para combatir signos de la edad y recuperar la confianza. ¡En pocos días, tu piel más firme e iluminada!</p>
+            
+            <div class="chart-container glass-panel" style="position: relative; overflow: hidden; padding-bottom: 2.5rem;">
+                <!-- Decorative background elements -->
+                <div class="chart-glow-bg top-right"></div>
+                <div class="chart-glow-bg bottom-left"></div>
+                
+                <h3 class="chart-title">Resultados Estimados en 4 Semanas</h3>
+                <div class="chart-visual" style="align-items: stretch; height: auto; justify-content: center;">
+                    <!-- Pure CSS Chart representation -->
+                    <div class="chart-graph-area" style="margin-top: 10px; max-width: 480px; width: 100%;">
+                        <svg viewBox="0 0 100 50" class="line-chart" id="dynamicChart" style="overflow: visible;">
+                            <defs>
+                                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#E2B15B" />
+                                    <stop offset="100%" stop-color="#F2D18B" />
+                                </linearGradient>
+                                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="rgba(226, 177, 91, 0.5)" />
+                                    <stop offset="100%" stop-color="rgba(226, 177, 91, 0.0)" />
+                                </linearGradient>
+                                <linearGradient id="pinkBlueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#8b5cf6" />
+                                    <stop offset="100%" stop-color="#8b5cf6" />
+                                </linearGradient>
+                                <filter id="glowLine">
+                                    <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <filter id="glowLineOther">
+                                    <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                                <filter id="glowPoint">
+                                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+ 
+                            <!-- Gridlines -->
+                            <g class="grid-lines">
+                                <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(0,0,0,0.04)" stroke-width="0.3" stroke-dasharray="2" />
+                                <line x1="0" y1="25" x2="100" y2="25" stroke="rgba(0,0,0,0.04)" stroke-width="0.3" stroke-dasharray="2" />
+                                <line x1="0" y1="40" x2="100" y2="40" stroke="rgba(0,0,0,0.04)" stroke-width="0.3" stroke-dasharray="2" />
+                            </g>
+ 
+                            <!-- Axes L-Shape -->
+                            <g class="chart-axes">
+                                <!-- Y Axis -->
+                                <line x1="0" y1="-2" x2="0" y2="50" stroke="var(--text-main)" stroke-width="0.6" opacity="0.6" />
+                                <!-- X Axis -->
+                                <line x1="0" y1="50" x2="102" y2="50" stroke="var(--text-main)" stroke-width="0.6" opacity="0.6" />
+                                <!-- Arrows -->
+                                <polygon points="-1,0 0,-3 1,0" fill="var(--text-main)" opacity="0.6" />
+                                <polygon points="100,49 103,50 100,51" fill="var(--text-main)" opacity="0.6" />
+                            </g>
+ 
+                            <!-- Area Gradient -->
+                            <path class="area-botox" d="M0,50 C15,50 20,38 33,38 C45,38 55,35 66,35 C80,35 85,5 100,5 L100,50 L0,50 Z" fill="url(#areaGradient)" opacity="0"/>
+                             
+                            <!-- Other Solutions Line -->
+                            <path class="line-other anim-path-other" d="M0,50 C15,50 20,40 33,40 C45,40 55,39 66,39 C80,39 85,38 100,38" fill="none" stroke="url(#pinkBlueGradient)" stroke-width="1.2" filter="url(#glowLineOther)" />
+                             
+                            <!-- Other Solutions Data Points -->
+                            <g class="data-points-other">
+                                <circle cx="0" cy="50" r="1.2" fill="#fff" stroke="#8b5cf6" stroke-width="0.4" class="pt-1-other" opacity="0"/>
+                                <circle cx="33" cy="40" r="1.2" fill="#fff" stroke="#8b5cf6" stroke-width="0.4" class="pt-2-other" opacity="0"/>
+                                <circle cx="66" cy="39" r="1.2" fill="#fff" stroke="#8b5cf6" stroke-width="0.4" class="pt-3-other" opacity="0"/>
+                                <circle cx="100" cy="38" r="1.5" fill="#8b5cf6" stroke="#fff" stroke-width="0.4" class="pt-4-other" filter="url(#glowLineOther)" opacity="0"/>
+                            </g>
+ 
+                            <!-- Main Line -->
+                            <path class="line-botox anim-path-main" d="M0,50 C15,50 20,38 33,38 C45,38 55,35 66,35 C80,35 85,5 100,5" fill="none" stroke="url(#goldGradient)" stroke-width="1.8" filter="url(#glowLine)"/>
+                             
+                            <!-- Data Points -->
+                            <g class="data-points">
+                                <circle cx="0" cy="50" r="1.5" fill="#fff" stroke="#E2B15B" stroke-width="0.6" class="pt-1" opacity="0"/>
+                                <circle cx="33" cy="38" r="1.5" fill="#fff" stroke="#E2B15B" stroke-width="0.6" class="pt-2" opacity="0"/>
+                                <circle cx="66" cy="35" r="1.5" fill="#fff" stroke="#E2B15B" stroke-width="0.6" class="pt-3" opacity="0"/>
+                                <circle cx="100" cy="5" r="2.5" fill="#E2B15B" stroke="#fff" stroke-width="0.6" class="pt-4" filter="url(#glowPoint)" opacity="0"/>
+                            </g>
+                        </svg>
+ 
+                    </div>
+                </div>
+                <div class="chart-legend" style="margin-top: 1rem;">
+                    <div class="legend-item"><span class="dot gold" style="box-shadow: 0 0 8px rgba(216,159,85,0.5);"></span> <span style="font-weight: 600;">Botox Coreano Manual</span></div>
+                    <div class="legend-item"><span class="dot pink-blue" style="background: #8b5cf6; box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);"></span> <span style="color: var(--text-dim);">Otras Soluciones</span></div>
+                </div>
+            </div>
+            
+            <button id="btnProximaEtapa" class="primary-btn pulse-anim mt-4" onclick="nextStep(9, null, null)">Siguiente Etapa</button>
+        </section>
+
+        <!-- Etapa 9: Carregamento -->
+        <section class="step" id="step9">
+            <div class="loading-view">
+                <div class="spinner-container">
+                    <div class="spinner"></div>
+                </div>
+                <h1 class="step-title">Creando tu plan personalizado...</h1>
+                
+                <!-- Premium Carousel Card -->
+                <div class="ba-carousel-card" id="baCarouselCard">
+                    <div class="ba-carousel-track">
+                        <img src="assets/ba1.1.png" alt="Resultado 1" class="ba-carousel-img active">
+                        <img src="assets/ba2.2.png" alt="Resultado 2" class="ba-carousel-img">
+                        <img src="assets/ba3.3.png" alt="Resultado 3" class="ba-carousel-img">
+                        <img src="assets/ba4.4.png" alt="Resultado 4" class="ba-carousel-img">
+                    </div>
+                    <div class="ba-carousel-indicators">
+                        <span class="indicator active"></span>
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                    </div>
+                </div>
+                
+                <div class="loading-tasks">
+                    <div class="task" id="task1">
+                        <span class="task-icon">🔄</span>
+                        <div class="task-content">
+                            <div class="task-header">
+                                <span class="task-text">Analizando tu piel...</span>
+                                <span class="task-pct">0%</span>
+                            </div>
+                            <div class="task-bar-container"><div class="task-bar-fill"></div></div>
+                        </div>
+                    </div>
+                    <div class="task" id="task2">
+                        <span class="task-icon">⏳</span>
+                        <div class="task-content">
+                            <div class="task-header">
+                                <span class="task-text">Revisando tus cuidados...</span>
+                                <span class="task-pct">0%</span>
+                            </div>
+                            <div class="task-bar-container"><div class="task-bar-fill"></div></div>
+                        </div>
+                    </div>
+                    <div class="task" id="task3">
+                        <span class="task-icon">✨</span>
+                        <div class="task-content">
+                            <div class="task-header">
+                                <span class="task-text">Generando plan final...</span>
+                                <span class="task-pct">0%</span>
+                            </div>
+                            <div class="task-bar-container"><div class="task-bar-fill"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <img id="step9Image" src="assets/foto_9.png" class="hidden mt-4" style="width: 100%; border-radius: 16px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1);" alt="Análisis completado">
+
+                <!-- Conteúdo Diagnóstico Movido da Etapa 10 -->
+                <div id="step9Diagnosis" class="hidden mt-4">
+                    <h1 class="step-title" style="margin-bottom: 1.5rem;">Resultado de tu evaluación</h1>
+                    
+                    <div class="diagnosis-card glass-panel alert-box">
+                        <div class="level-bar-container">
+                            <p>Nivel de envejecimiento:</p>
+                            <div class="level-track">
+                                <div class="level-fill high"></div>
+                                <span class="level-marker">🚨 Zona de alerta</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="diagnosis-message glass-panel yellow-box mt-3">
+                        <p>⚠️ <strong>Atención:</strong> Tu rostro está perdiendo soporte silenciosamente. Incluso con algunos cuidados, factores diarios están debilitando la musculatura facial y profundizando las arrugas.</p>
+                    </div>
+
+                    <div class="grid-2-col mt-3">
+                        <div class="diagnosis-box red-box">
+                            <h3>⚠️ Principales Señales:</h3>
+                            <ul>
+                                <li>❌ Flacidez progresiva</li>
+                                <li>❌ Caída en las mejillas</li>
+                                <li>❌ Mirada cansada</li>
+                                <li>❌ Frente marcada</li>
+                            </ul>
+                        </div>
+                        <div class="diagnosis-box green-box">
+                            <h3>✨ El Protocolo Hará:</h3>
+                            <ul>
+                                <li>✅ Reactivar colágeno</li>
+                                <li>✅ Fortalecer musculatura</li>
+                                <li>✅ Mejorar firmeza</li>
+                                <li>✅ Rejuvenecer la piel</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="primary-btn pulse-anim mt-4" onclick="nextStep(10, null, null)">Desbloquear mi protocolo</button>
+                </div>
+
+                <!-- Simulação de Chat do Facebook (escondido inicialmente) -->
+                <div id="step9Chat" class="hidden mt-4">
+                    <div class="init-testimonial-card">
+                        <div class="init-testimonial-header">
+                            <strong>Fátima, 52 años</strong>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="init-testimonial-text">"¡Hola!! Paso por aquí para agradecer de corazón! Tengo 52 años y después de usar el botox coreano nunca más necesité maquillaje para esconder las arrugas 🙌 Te juro, me quedé tan joven que mi marido dijo que necesito sacar otra cédula urgente jaja ¡Muchas gracias de verdad!"</p>
+                    </div>
+                </div>
+
+                <div id="step9Testimonials" class="static-testimonials mt-4">
+                    <p class="text-dim mb-3 text-center" style="font-size:0.9rem">En vivo de quienes ya usan el protocolo:</p>
+                    
+                    <div class="init-testimonial-card">
+                        <div class="init-testimonial-header">
+                            <strong>Sonia, 58 años <span style="color:#51cf66; font-size: 0.8rem; margin-left: 5px;">✓ Verificada</span></strong>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="init-testimonial-text">"Pensé que ya no había remedio para mis marcas del bigote chino y la frente. Cuando vi mi resultado después de 4 semanas de este protocolo, ¡lloré de emoción! Rejuvenecí unos 10 años fácil. ¡Vale cada centavo!"</p>
+                    </div>
+
+                    <div class="init-testimonial-card">
+                        <div class="init-testimonial-header">
+                            <strong>Marcia, 48 años</strong>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="init-testimonial-text">"¡La firmeza que ganó mi piel es impresionante, hasta mi marido lo notó!"</p>
+                    </div>
+                    
+                    <div class="init-testimonial-card">
+                        <div class="init-testimonial-header">
+                            <strong>Silvana, 55 años</strong>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="init-testimonial-text">"Muy simple de encajar en la rutina. ¡Por fin un botox sin agujas!"</p>
+                    </div>
+
+                    <div class="init-testimonial-card">
+                        <div class="init-testimonial-header">
+                            <strong>Renata, 42 años</strong>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="init-testimonial-text">"Mis líneas de expresión de la frente desaparecieron. Estaba a punto de gastar mil dólares en el dermatólogo."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Etapa 10: Resultado / Video placeholder 9:16 -->
+        <section class="step" id="step10">
+            <h1 class="step-title highlight-text">¡Tu plan personalizado del Botox Coreano Manual está listo! 🎉</h1>
+            <p class="step-subtitle">Tu plan personalizado se liberará al final del video 👇🏼</p>
+            
+            <div class="glass-panel mt-3 mb-4" style="padding: 1rem;">
+                <div class="video-container video-9x16">
+                    <div class="video-placeholder">
+                        <span class="video-badge">Placeholder 9:16</span>
+                        <span>🎬 El video comienza aquí</span>
+                        <p>Descubre el secreto del rejuvenecimiento coreano en 5 minutos diarios.</p>
+                        <button class="play-btn" type="button" aria-label="Reproducir">▶</button>
+                    </div>
+                </div>
+                <!-- VTurb: pegar el embed real aquí cuando esté listo -->
+            </div>
+        </section>
+
+        <!-- Etapa 11: VSL / Página de Vendas -->
+        <section class="step" id="step11">
+            <h1 class="step-title highlight-text">¡Tu plan del Botox Coreano Manual está listo! 🎉</h1>
+            <p class="step-subtitle">Se liberará al final del video de abajo 👇🏼</p>
+            
+            <div class="video-container glass-panel mt-3">
+                <!-- VSL Placeholder -->
+                <div class="video-placeholder">
+                    <span>🎬 El Video Empieza Aquí</span>
+                    <p>Descubre el secreto del rejuvenecimiento coreano en 5 minutos diarios.</p>
+                    <button class="play-btn">▶</button>
+                </div>
+                <!-- Real embed code would go here:
+                <iframe src="YOUR_VTURB_EMBED_URL" frameborder="0" allowfullscreen></iframe>
+                -->
+            </div>
+
+            <div class="checkout-section hidden mt-4" id="checkoutSection">
+                <button class="primary-btn shiny-btn">QUIERO MI PLAN AHORA</button>
+                <p class="safe-checkout">🔒 Compra 100% segura. Acceso inmediato.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

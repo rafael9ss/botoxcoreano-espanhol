@@ -1,0 +1,49 @@
+/* Inter — local (latin) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('woff2/Inter-300-latin.woff2') format('woff2'),
+       url('Inter-300.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('woff2/Inter-400-latin.woff2') format('woff2'),
+       url('Inter-400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('woff2/Inter-500-latin.woff2') format('woff2'),
+       url('Inter-500.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('woff2/Inter-600-latin.woff2') format('woff2'),
+       url('Inter-600.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('woff2/Inter-700-latin.woff2') format('woff2'),
+       url('Inter-700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('woff2/Inter-700-latin.woff2') format('woff2'),
+       url('Inter-700.ttf') format('truetype');
+}
