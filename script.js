@@ -51,9 +51,9 @@ function startInitSequence() {
 }
 
 const testimonials = [
-    { name: "Claudete", age: 52, text: "Hice el plan por 3 semanas y mi hermana me preguntó si me había hecho botox. ¡Nunca me sentí tan bien, me encantó! 😍❤️" },
-    { name: "Mariana", age: 45, text: "Los masajes son relajantes y el resultado en la firmeza de la piel es impresionante. ¡Lo recomiendo mucho!" },
-    { name: "Luciana", age: 58, text: "Por fin algo natural que funciona. Mis arrugas alrededor de los ojos disminuyeron de forma visible." }
+    { name: "Claudete", age: 52, text: "Seguí el plan durante tres semanas y mi hermana me preguntó si me había hecho bótox. ¡Nunca me había sentido tan bien! ¡Me encantó! 😍❤️" },
+    { name: "Mariana", age: 45, text: "Los masajes son relajantes y el efecto en la firmeza de mi piel es impresionante. ¡Lo recomiendo mucho!" },
+    { name: "Luciana", age: 58, text: "Por fin encontré algo natural que funciona. Las arrugas alrededor de mis ojos se notan menos." }
 ];
 
 let currentTestimonialIndex = 0;
@@ -239,6 +239,9 @@ function startLoadingSequence() {
                         diag.classList.remove('hidden');
                         diag.style.animation = 'fadeInSlide 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
                     }
+
+                    const loadingTitle = document.querySelector('#step9 .loading-view > .step-title');
+                    if (loadingTitle) loadingTitle.textContent = 'Tu análisis está listo.';
 
                     // Esconde depoimentos genéricos
                     const testimonials = document.getElementById('step9Testimonials');
