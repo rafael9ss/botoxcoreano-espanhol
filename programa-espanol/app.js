@@ -205,7 +205,7 @@
     }
     const isMainCourse = group.startsWith('day-');
     const audioLabel = isMainCourse || isVimeo ? 'audio en español latinoamericano' : 'audio original en portugués';
-    const caption = start ? `Empieza en 0:32 · ${audioLabel}` : `Video complementario · ${audioLabel}`;
+    const caption = `${isMainCourse ? 'Video principal' : 'Video complementario'} · ${audioLabel}`;
     const poster = item.thumbnail || (isVimeo ? '' : `https://i.ytimg.com/vi/${id}/hqdefault.jpg`);
     const posterStyle = poster ? ` style="background-image:url('${escapeHtml(poster)}')"` : '';
     return `<div class="video-shell${vertical}">
