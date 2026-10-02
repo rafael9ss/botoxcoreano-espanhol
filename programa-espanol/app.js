@@ -76,7 +76,7 @@
     return `<header class="site-header">
       <button type="button" class="brand-link" data-action="navigate" data-screen="home" aria-label="Ir al inicio">
         <img src="assets/logo.png" alt="" class="brand-mark" />
-        <span class="brand-name">Botox Coreano <b>Manual</b><small>Ritual facial · 28 días</small></span>
+        <span class="brand-name">App de Botox <b>Coreano</b><small>Ritual facial · 28 días</small></span>
       </button>
       <nav class="desktop-nav" aria-label="Navegación principal">
         ${navItem('home', 'Inicio', 'home', 'desktop-link')}
@@ -98,7 +98,7 @@
     </nav>`;
   }
   function footer() {
-    return `<footer class="site-footer"><span>Botox Coreano Manual · 28 días</span><span>Sin registro · tu avance queda guardado en este dispositivo</span></footer>`;
+    return `<footer class="site-footer"><span>App de Botox Coreano · 28 días</span><span>Sin registro · tu avance queda guardado en este dispositivo</span></footer>`;
   }
   function pageShell(content) {
     app.innerHTML = `<div class="site-shell">${siteHeader()}<main class="page">${content}</main>${footer()}${mobileNav()}</div>`;
@@ -118,7 +118,7 @@
       <section class="home-hero">
         <div class="hero-copy">
           <p class="eyebrow eyebrow-light"><span></span> Una pausa para volver a ti</p>
-          <h1>El cuidado también está en <em>los pequeños gestos.</em></h1>
+          <h1>Solo con esto puedes <em>mejorar muchísimo tu cara.</em></h1>
           <p class="hero-description">Una jornada de movimientos faciales guiados para acompañar tu rutina, día a día y a tu propio ritmo.</p>
           <div class="hero-actions">
             <button type="button" class="button button-light" data-action="open-day" data-day="${next.day}">${icon('playFill', 16)} ${completed === 28 ? 'Repetir el día 28' : `Empezar el día ${next.day}`}</button>
