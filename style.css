@@ -837,3 +837,10 @@ button {
     max-width: 100%;
     height: 100%;
 }
+
+/* Keep the tracked checkout link styled as the existing primary button. */
+#checkoutSection a.primary-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
