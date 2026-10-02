@@ -153,7 +153,7 @@ function nextStep(stepNum, key, value) {
     if (currentStep === 9) {
         startLoadingSequence();
     } else if (currentStep === 11) {
-        startVslTimer();
+        loadVslPlayer();
     }
     
     // Scroll to top smoothly
@@ -332,20 +332,27 @@ function animatePercentage(taskEl, duration) {
 }
 
 
-// VSL Logic
-function startVslTimer() {
-    // Reveal button after X seconds (simulate VSL pitch delay)
-    // For testing/preview purposes, set to 5 seconds
-    const delaySeconds = 5; 
-    
-    setTimeout(() => {
-        const checkout = document.getElementById('checkoutSection');
-        checkout.classList.remove('hidden');
-        // Small fade in
-        checkout.style.opacity = 0;
-        setTimeout(() => checkout.style.opacity = 1, 50);
-        checkout.style.transition = 'opacity 1s ease';
-    }, delaySeconds * 1000);
+// Load the player only when its step is visible so hidden autoplay cannot count down.
+function loadVslPlayer() {
+    const mount = document.getElementById('vslBotoxCoreano');
+    if (!mount || mount.dataset.vslLoaded === 'true') return;
+
+    mount.dataset.vslLoaded = 'true';
+
+    if (window.VslStudio?.mount) {
+        window.VslStudio.mount(mount);
+        return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://vsl-studio3d.vercel.app/e.js';
+    script.async = true;
+    script.onload = () => window.VslStudio?.mount(mount);
+    script.onerror = () => {
+        mount.dataset.vslLoaded = 'false';
+        console.error('[vsl] No se pudo cargar el reproductor.');
+    };
+    document.head.appendChild(script);
 }
 
 // Before & After Slider Logic
