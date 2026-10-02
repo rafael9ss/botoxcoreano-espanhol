@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=PIXEL_ID&ev=PageView&noscript=1"
 /></noscript>
 End Meta Pixel Code -->
 </head>
-<script src="https://raio-x-quiz.vercel.app/quiz-tracker.js" data-quiz="botox-coreano-espanhol" data-hosts="botoxcoreano-espanhol.vercel.app" data-screen=".step" data-option=".option-card, .option-row" data-checkout="#checkoutSection button" defer></script>
+<script src="https://raio-x-quiz.vercel.app/quiz-tracker.js" data-quiz="botox-coreano-espanhol" data-hosts="botoxcoreano-espanhol.vercel.app" data-screen=".step" data-option=".option-card, .option-row" data-checkout="#checkoutSection #checkoutButton" defer></script>
 <body>
     <div class="bg-animated"></div>
     
@@ -507,12 +507,13 @@ End Meta Pixel Code -->
             </div>
 
             <div class="checkout-section mt-4" id="checkoutSection" data-vsl-reveal="236" hidden>
-                <button id="checkoutButton" class="primary-btn shiny-btn" type="button" onclick="window.location.href='https://pay.hotmart.com/D107836980P?bid=1790974200492'">QUIERO ACCEDER AHORA</button>
+                <a id="checkoutButton" class="primary-btn shiny-btn" href="https://pay.hotmart.com/D107836980P?bid=1790974200492">QUIERO ACCEDER AHORA</a>
                 <p class="safe-checkout">🔒 Compra 100% segura. Acceso inmediato.</p>
             </div>
         </section>
     </main>
 
     <script src="script.js"></script>
+    <script async src="https://trackvendas.vercel.app/tracker.js?key=tv_pub_221163784a4cc093da05634a3ef55fab" data-endpoint="https://skzrgijcixeofskxifiz.supabase.co/functions/v1/track"></script>
 </body>
 </html>
