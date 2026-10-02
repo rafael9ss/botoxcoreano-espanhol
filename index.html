@@ -506,6 +506,7 @@ End Meta Pixel Code -->
                 </div>
                 <!-- VTurb: pegar el embed real aquí cuando esté listo -->
             </div>
+            <button class="primary-btn pulse-anim mt-4" type="button" onclick="nextStep(11, null, null)">Continuar al video</button>
         </section>
 
         <!-- Etapa 11: VSL / Página de Vendas -->
@@ -514,19 +515,11 @@ End Meta Pixel Code -->
             <p class="step-subtitle">Al final del video podrás ver tu plan personalizado. 👇🏼</p>
             
             <div class="video-container glass-panel mt-3">
-                <!-- VSL Placeholder -->
-                <div class="video-placeholder">
-                    <span>🎬 El Video Empieza Aquí</span>
-                    <p>Descubre el secreto del rejuvenecimiento coreano en 5 minutos diarios.</p>
-                    <button class="play-btn">▶</button>
-                </div>
-                <!-- Real embed code would go here:
-                <iframe src="YOUR_VTURB_EMBED_URL" frameborder="0" allowfullscreen></iframe>
-                -->
+                <div id="vslBotoxCoreano" data-vsl="vsl-botox-coreano"></div>
             </div>
 
-            <div class="checkout-section hidden mt-4" id="checkoutSection">
-                <button class="primary-btn shiny-btn">QUIERO MI PLAN AHORA</button>
+            <div class="checkout-section mt-4" id="checkoutSection" data-vsl-reveal="236" hidden>
+                <button id="checkoutButton" class="primary-btn shiny-btn" type="button" disabled>QUIERO MI PLAN AHORA</button>
                 <p class="safe-checkout">🔒 Compra 100% segura. Acceso inmediato.</p>
             </div>
         </section>
