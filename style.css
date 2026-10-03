@@ -844,3 +844,13 @@ button {
     text-align: center;
     text-decoration: none;
 }
+
+#checkoutSection .local-currency-note {
+    margin: 0.75rem 0 0;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    background: rgba(198, 40, 40, 0.08);
+    color: #b42318;
+    font-weight: 700;
+    text-align: center;
+}
