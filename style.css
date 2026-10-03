@@ -826,6 +826,7 @@ button {
     height: auto;
     padding: 0;
     margin: 0.75rem -8px 0;
+    align-self: center;
     display: flex;
     align-items: stretch;
     justify-content: center;
