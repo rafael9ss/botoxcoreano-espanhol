@@ -840,6 +840,7 @@ button {
 
 /* Keep the tracked checkout link styled as the existing primary button. */
 #checkoutSection a.primary-btn {
+    background: #16a34a;
     display: block;
     text-align: center;
     text-decoration: none;
