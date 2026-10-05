@@ -39,7 +39,7 @@ End Meta Pixel Code -->
 
         <!-- Header with progress bar -->
         <header class="app-header hidden" id="appHeader">
-            <img src="assets/botoxdesu.jfif" id="headerImg" alt="Quiz Logo" style="width: 100%; max-width: 150px; margin: 0 auto 15px auto; display: block; border-radius: 8px; mix-blend-mode: multiply;">
+            <img src="assets/botoxdesu.webp" onerror="this.onerror=null;this.src='assets/botoxdesu.jfif'" id="headerImg" alt="Quiz Logo" style="width: 100%; max-width: 150px; margin: 0 auto 15px auto; display: block; border-radius: 8px; mix-blend-mode: multiply;">
             <div class="progress-container">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
@@ -49,7 +49,7 @@ End Meta Pixel Code -->
         <!-- Etapa 0: Carregamento e Validação Inicial -->
         <section class="step active" id="step0">
             <div class="init-header">
-                <img src="assets/botoxdesu.jfif" alt="Quiz Logo" class="init-logo">
+                <img src="assets/botoxdesu.webp" onerror="this.onerror=null;this.src='assets/botoxdesu.jfif'" alt="Quiz Logo" class="init-logo">
             </div>
             <h1 class="init-title">Rejuvenece hasta 20 años en 28 días con el</h1>
             <h2 class="init-subtitle">Botox Coreano Manual</h2>
@@ -60,7 +60,7 @@ End Meta Pixel Code -->
             <p class="init-loading-text">Cargando la evaluación...</p>
 
             <div class="init-image-wrapper">
-                <img src="assets/imagedesu.png" alt="Antes y Después" class="init-ba-image">
+                <img fetchpriority="high" src="assets/imagedesu.webp" onerror="this.onerror=null;this.src='assets/imagedesu.png'" alt="Antes y Después" class="init-ba-image">
             </div>
 
             <div class="init-testimonials-container mt-4">
@@ -148,7 +148,7 @@ End Meta Pixel Code -->
                 <div class="split-image">
                     <div class="focus-face-wrapper">
                         <!-- Imagem de uma mulher de idade aproximada a 60 anos (utilizando o asset local age_50s) -->
-                        <img src="assets/leticia_52.jpg" alt="Áreas del rostro" class="focus-face-img">
+                        <img loading="lazy" decoding="async" src="assets/leticia_52.jpg" alt="Áreas del rostro" class="focus-face-img">
                         
                         <div class="circle-marker cir-left"></div>
                         <div class="circle-marker cir-above"></div>
@@ -174,9 +174,9 @@ End Meta Pixel Code -->
             <div class="ba-slider-container">
                 <div class="ba-slider" id="baSlider">
                     <!-- Imagem do Depois (Mulher mais jovem com a pele limpa) -->
-                    <img src="assets/after_final.png" alt="Después" class="img-after">
+                    <img loading="lazy" decoding="async" src="assets/after_final.png" alt="Después" class="img-after">
                     <!-- Imagem do Antes (Mulher mais velha/marcas de expressao) -->
-                    <img src="assets/before_final.png" alt="Antes" class="img-before" id="imgBeforeClipped">
+                    <img loading="lazy" decoding="async" src="assets/before_final.png" alt="Antes" class="img-before" id="imgBeforeClipped">
                     <div class="ba-slider-handle" id="baSliderHandle">
                         <span class="arrows">◀▶</span>
                     </div>
@@ -351,10 +351,10 @@ End Meta Pixel Code -->
                 <!-- Premium Carousel Card -->
                 <div class="ba-carousel-card" id="baCarouselCard">
                     <div class="ba-carousel-track">
-                        <img src="assets/ba1.1.png" alt="Resultado 1" class="ba-carousel-img active">
-                        <img src="assets/ba2.2.png" alt="Resultado 2" class="ba-carousel-img">
-                        <img src="assets/ba3.3.png" alt="Resultado 3" class="ba-carousel-img">
-                        <img src="assets/ba4.4.png" alt="Resultado 4" class="ba-carousel-img">
+                        <img loading="lazy" decoding="async" src="assets/ba1.1.webp" onerror="this.onerror=null;this.src='assets/ba1.1.png'" alt="Resultado 1" class="ba-carousel-img active">
+                        <img loading="lazy" decoding="async" src="assets/ba2.2.webp" onerror="this.onerror=null;this.src='assets/ba2.2.png'" alt="Resultado 2" class="ba-carousel-img">
+                        <img loading="lazy" decoding="async" src="assets/ba3.3.webp" onerror="this.onerror=null;this.src='assets/ba3.3.png'" alt="Resultado 3" class="ba-carousel-img">
+                        <img loading="lazy" decoding="async" src="assets/ba4.4.webp" onerror="this.onerror=null;this.src='assets/ba4.4.png'" alt="Resultado 4" class="ba-carousel-img">
                     </div>
                     <div class="ba-carousel-indicators">
                         <span class="indicator active"></span>
@@ -397,7 +397,7 @@ End Meta Pixel Code -->
                     </div>
                 </div>
 
-                <img id="step9Image" src="assets/foto_9.png" class="hidden mt-4" style="width: 100%; border-radius: 16px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1);" alt="Análisis completado">
+                <img loading="lazy" decoding="async" id="step9Image" src="assets/foto_9.webp" onerror="this.onerror=null;this.src='assets/foto_9.png'" class="hidden mt-4" style="width: 100%; border-radius: 16px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1);" alt="Análisis completado">
 
                 <!-- Conteúdo Diagnóstico Movido da Etapa 10 -->
                 <div id="step9Diagnosis" class="hidden mt-4">

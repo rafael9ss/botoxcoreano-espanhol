@@ -11,6 +11,10 @@ let userData = {
 const totalSteps = 11;
 let currentStep = 0;
 
+const warmedImageCache = new Map();
+let vslStudioLoadPromise = null;
+let vslWarmupStarted = false;
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     if (currentStep > 0) {
@@ -22,6 +26,49 @@ document.addEventListener('DOMContentLoaded', () => {
         startInitSequence();
     }
 });
+
+function warmImage(src) {
+    const url = new URL(src, document.baseURI).href;
+    if (warmedImageCache.has(url)) return warmedImageCache.get(url);
+
+    const image = new Image();
+    image.decoding = 'async';
+    image.fetchPriority = 'low';
+    image.src = url;
+    if (typeof image.decode === 'function') image.decode().catch(() => {});
+    warmedImageCache.set(url, image);
+    return image;
+}
+
+function warmUpcomingQuizImages() {
+    const warm = () => {
+        const run = () => {
+            warmImage('assets/leticia_52.jpg');
+            warmImage('assets/after_final.png');
+            warmImage('assets/before_final.png');
+        };
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(run, { timeout: 1500 });
+        } else {
+            window.setTimeout(run, 300);
+        }
+    };
+
+    if (document.readyState === 'complete') {
+        warm();
+    } else {
+        window.addEventListener('load', warm, { once: true });
+    }
+}
+
+function warmCarouselImages() {
+    [
+        'assets/ba1.1.webp',
+        'assets/ba2.2.webp',
+        'assets/ba3.3.webp',
+        'assets/ba4.4.webp'
+    ].forEach(warmImage);
+}
 
 // Init sequence for Step 0
 let testimonialInterval;
@@ -43,6 +90,7 @@ function startInitSequence() {
     }, 100);
 
     initTestimonials();
+    warmUpcomingQuizImages();
 
     setTimeout(() => {
         clearInterval(testimonialInterval);
@@ -150,8 +198,12 @@ function nextStep(stepNum, key, value) {
     
     updateStepUI();
     
-    if (currentStep === 9) {
+    if (currentStep === 8) {
+        warmCarouselImages();
+    } else if (currentStep === 9) {
         startLoadingSequence();
+    } else if (currentStep === 10) {
+        warmVslPlayer();
     } else if (currentStep === 11) {
         loadVslPlayer();
     }
@@ -175,6 +227,10 @@ function updateProgress() {
 
 // Loading Sequence for Step 9
 function startLoadingSequence() {
+    warmCarouselImages();
+    warmVslPlayer();
+    warmImage('assets/foto_9.webp');
+
     // Reset/Ensure carousel container, loading tasks, and spinner are visible
     const carouselCard = document.getElementById('baCarouselCard');
     if (carouselCard) carouselCard.style.display = 'flex';
@@ -264,48 +320,39 @@ function startCarousel() {
     const images = document.querySelectorAll('.ba-carousel-img');
     const indicators = document.querySelectorAll('.ba-carousel-indicators .indicator');
     if (images.length === 0) return;
-    
-    // Reset to first slide active
-    images.forEach((img, idx) => {
-        if (idx === 0) {
-            img.classList.add('active');
-        } else {
-            img.classList.remove('active');
-        }
-    });
-    indicators.forEach((ind, idx) => {
-        if (idx === 0) {
-            ind.classList.add('active');
-        } else {
-            ind.classList.remove('active');
-        }
-    });
-    
+
+    images.forEach((img, idx) => img.classList.toggle('active', idx === 0));
+    indicators.forEach((indicator, idx) => indicator.classList.toggle('active', idx === 0));
+
     let currentIndex = 0;
-    
-    // Clear any existing interval to prevent duplicates
+    let advancePending = false;
     if (carouselInterval) clearInterval(carouselInterval);
-    
-    carouselInterval = setInterval(() => {
-        // Remove active class from current image and indicator
-        if (images[currentIndex]) {
+
+    carouselInterval = setInterval(async () => {
+        if (advancePending) return;
+        advancePending = true;
+        const nextIndex = (currentIndex + 1) % images.length;
+        const nextImage = images[nextIndex];
+
+        try {
+            if (typeof nextImage.decode === 'function') {
+                await nextImage.decode();
+            } else if (!nextImage.complete) {
+                return;
+            }
+            if (!nextImage.naturalWidth) return;
+
             images[currentIndex].classList.remove('active');
+            if (indicators[currentIndex]) indicators[currentIndex].classList.remove('active');
+            currentIndex = nextIndex;
+            nextImage.classList.add('active');
+            if (indicators[currentIndex]) indicators[currentIndex].classList.add('active');
+        } catch (_) {
+            // Keep the current slide visible if the next image is still unavailable.
+        } finally {
+            advancePending = false;
         }
-        if (indicators[currentIndex]) {
-            indicators[currentIndex].classList.remove('active');
-        }
-        
-        // Go to next index, loop back to 0 if at the end
-        currentIndex = (currentIndex + 1) % images.length;
-        
-        // Add active class to new image and indicator
-        if (images[currentIndex]) {
-            images[currentIndex].classList.add('active');
-        }
-        if (indicators[currentIndex]) {
-            indicators[currentIndex].classList.add('active');
-        }
-    }, 2000); // 2 seconds on each image
+    }, 2000);
 }
 
 function animatePercentage(taskEl, duration) {
@@ -332,27 +379,82 @@ function animatePercentage(taskEl, duration) {
 }
 
 
-// Load the player only when its step is visible so hidden autoplay cannot count down.
+// Prepare the VSL's network resources on the intro step without mounting the player.
+function appendResourceHint(rel, href, as) {
+    const alreadyAdded = Array.from(document.head.querySelectorAll('link'))
+        .some(link => link.rel === rel && link.href === href);
+    if (alreadyAdded) return;
+
+    const hint = document.createElement('link');
+    hint.rel = rel;
+    hint.href = href;
+    if (as) hint.as = as;
+    if (rel === 'preconnect') hint.crossOrigin = 'anonymous';
+    if (rel === 'preload') hint.setAttribute('fetchpriority', 'low');
+    document.head.appendChild(hint);
+}
+
+function warmVslPlayer() {
+    if (vslWarmupStarted) return;
+    vslWarmupStarted = true;
+
+    const vslOrigin = 'https://vsl-studio3d.vercel.app';
+    [
+        vslOrigin,
+        'https://www.youtube.com',
+        'https://i.ytimg.com'
+    ].forEach(origin => appendResourceHint('preconnect', origin));
+
+    appendResourceHint('preload', `${vslOrigin}/e.js`, 'script');
+    appendResourceHint('preload', 'https://www.youtube.com/iframe_api', 'script');
+
+    fetch(`${vslOrigin}/api/config/botox-koreano-2`, { mode: 'cors' })
+        .then(response => {
+            if (!response.ok) throw new Error(`config ${response.status}`);
+            return response.json();
+        })
+        .catch(() => {});
+}
+
+function ensureVslStudioLoaded() {
+    if (window.VslStudio?.mount) return Promise.resolve(window.VslStudio);
+    if (vslStudioLoadPromise) return vslStudioLoadPromise;
+
+    vslStudioLoadPromise = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://vsl-studio3d.vercel.app/e.js';
+        script.async = true;
+        script.onload = () => {
+            if (window.VslStudio?.mount) {
+                resolve(window.VslStudio);
+            } else {
+                vslStudioLoadPromise = null;
+                reject(new Error('El reproductor no estuvo disponible.'));
+            }
+        };
+        script.onerror = () => {
+            vslStudioLoadPromise = null;
+            reject(new Error('No se pudo cargar el reproductor.'));
+        };
+        document.head.appendChild(script);
+    });
+
+    return vslStudioLoadPromise;
+}
+
+// Mount only after the video step is visible so hidden autoplay cannot count down.
 function loadVslPlayer() {
     const mount = document.getElementById('vslBotoxCoreano');
     if (!mount || mount.dataset.vslLoaded === 'true') return;
 
     mount.dataset.vslLoaded = 'true';
 
-    if (window.VslStudio?.mount) {
-        window.VslStudio.mount(mount);
-        return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://vsl-studio3d.vercel.app/e.js';
-    script.async = true;
-    script.onload = () => window.VslStudio?.mount(mount);
-    script.onerror = () => {
-        mount.dataset.vslLoaded = 'false';
-        console.error('[vsl] No se pudo cargar el reproductor.');
-    };
-    document.head.appendChild(script);
+    ensureVslStudioLoaded()
+        .then(vslStudio => vslStudio.mount(mount))
+        .catch(error => {
+            mount.dataset.vslLoaded = 'false';
+            console.error('[vsl]', error);
+        });
 }
 
 // Before & After Slider Logic
