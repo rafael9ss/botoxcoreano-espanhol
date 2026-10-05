@@ -379,36 +379,12 @@ function animatePercentage(taskEl, duration) {
 }
 
 
-// Prepare the VSL's network resources on the intro step without mounting the player.
-function appendResourceHint(rel, href, as) {
-    const alreadyAdded = Array.from(document.head.querySelectorAll('link'))
-        .some(link => link.rel === rel && link.href === href);
-    if (alreadyAdded) return;
-
-    const hint = document.createElement('link');
-    hint.rel = rel;
-    hint.href = href;
-    if (as) hint.as = as;
-    if (rel === 'preconnect') hint.crossOrigin = 'anonymous';
-    if (rel === 'preload') hint.setAttribute('fetchpriority', 'low');
-    document.head.appendChild(hint);
-}
-
+// Warm configuration during analysis; scripts already load when the quiz opens.
 function warmVslPlayer() {
     if (vslWarmupStarted) return;
     vslWarmupStarted = true;
 
-    const vslOrigin = 'https://vsl-studio3d.vercel.app';
-    [
-        vslOrigin,
-        'https://www.youtube.com',
-        'https://i.ytimg.com'
-    ].forEach(origin => appendResourceHint('preconnect', origin));
-
-    appendResourceHint('preload', `${vslOrigin}/e.js`, 'script');
-    appendResourceHint('preload', 'https://www.youtube.com/iframe_api', 'script');
-
-    fetch(`${vslOrigin}/api/config/botox-koreano-2`, { mode: 'cors' })
+    fetch('https://vsl-studio3d.vercel.app/api/config/botox-koreano-2', { mode: 'cors' })
         .then(response => {
             if (!response.ok) throw new Error(`config ${response.status}`);
             return response.json();
@@ -421,10 +397,8 @@ function ensureVslStudioLoaded() {
     if (vslStudioLoadPromise) return vslStudioLoadPromise;
 
     vslStudioLoadPromise = new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://vsl-studio3d.vercel.app/e.js';
-        script.async = true;
-        script.onload = () => {
+        const script = document.getElementById('vsl-studio-embed');
+        const loaded = () => {
             if (window.VslStudio?.mount) {
                 resolve(window.VslStudio);
             } else {
@@ -432,11 +406,18 @@ function ensureVslStudioLoaded() {
                 reject(new Error('El reproductor no estuvo disponible.'));
             }
         };
-        script.onerror = () => {
+        const failed = () => {
             vslStudioLoadPromise = null;
             reject(new Error('No se pudo cargar el reproductor.'));
         };
-        document.head.appendChild(script);
+        if (!script || script.dataset.failed === 'true') {
+            failed();
+        } else if (script.dataset.loaded === 'true') {
+            loaded();
+        } else {
+            script.addEventListener('load', loaded, { once: true });
+            script.addEventListener('error', failed, { once: true });
+        }
     });
 
     return vslStudioLoadPromise;
@@ -444,13 +425,27 @@ function ensureVslStudioLoaded() {
 
 // Mount only after the video step is visible so hidden autoplay cannot count down.
 function loadVslPlayer() {
-    const mount = document.getElementById('vslBotoxCoreano');
-    if (!mount || mount.dataset.vslLoaded === 'true') return;
+    const container = document.getElementById('vslVideoContainer');
+    if (!container || currentStep !== 11) return;
+    let mount = document.getElementById('vslBotoxCoreano');
+    if (!mount) {
+        mount = document.createElement('div');
+        mount.id = 'vslBotoxCoreano';
+        mount.dataset.vsl = 'botox-koreano-2';
+        container.appendChild(mount);
+    }
+    if (mount.dataset.vslLoaded === 'true') return;
 
     mount.dataset.vslLoaded = 'true';
 
     ensureVslStudioLoaded()
-        .then(vslStudio => vslStudio.mount(mount))
+        .then(vslStudio => {
+            if (currentStep !== 11 || container.getBoundingClientRect().width === 0) {
+                mount.dataset.vslLoaded = 'false';
+                return;
+            }
+            vslStudio.mount(mount);
+        })
         .catch(error => {
             mount.dataset.vslLoaded = 'false';
             console.error('[vsl]', error);
