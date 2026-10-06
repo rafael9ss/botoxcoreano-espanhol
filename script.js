@@ -77,25 +77,9 @@ let carouselInterval;
 function startInitSequence() {
     const appHeader = document.getElementById('appHeader');
     if (appHeader) appHeader.classList.add('hidden');
-    
-    // Animate init progress bar
-    const bar = document.getElementById('initProgressBar');
-    const duration = 6000; // 6 seconds
-    
-    setTimeout(() => {
-        if(bar) {
-            bar.style.transition = `width ${duration}ms linear`;
-            bar.style.width = '100%';
-        }
-    }, 100);
 
     initTestimonials();
     warmUpcomingQuizImages();
-
-    setTimeout(() => {
-        clearInterval(testimonialInterval);
-        nextStep(1); 
-    }, duration + 200);
 }
 
 const testimonials = [
