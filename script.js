@@ -368,7 +368,7 @@ function warmVslPlayer() {
     if (vslWarmupStarted) return;
     vslWarmupStarted = true;
 
-    fetch('https://vsl-studio3d.vercel.app/api/config/botox-koreano-2', { mode: 'cors' })
+    fetch('https://vsl-studio3d.vercel.app/api/config/botox-koreano-9-90-dol', { mode: 'cors' })
         .then(response => {
             if (!response.ok) throw new Error(`config ${response.status}`);
             return response.json();
@@ -415,7 +415,7 @@ function loadVslPlayer() {
     if (!mount) {
         mount = document.createElement('div');
         mount.id = 'vslBotoxCoreano';
-        mount.dataset.vsl = 'botox-koreano-2';
+        mount.dataset.vsl = 'botox-koreano-9-90-dol';
         container.appendChild(mount);
     }
     if (mount.dataset.vslLoaded === 'true') return;
