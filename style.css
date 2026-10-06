@@ -846,6 +846,25 @@ button {
     text-decoration: none;
 }
 
+#checkoutSection:not([hidden]) #checkoutButton {
+    animation: checkoutButtonPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes checkoutButtonPulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
+    }
+    50% {
+        box-shadow: 0 6px 24px rgba(22, 163, 74, 0.65), 0 0 0 8px rgba(22, 163, 74, 0.14);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #checkoutSection:not([hidden]) #checkoutButton {
+        animation: none;
+    }
+}
+
 #checkoutSection .local-currency-note {
     margin: 0.75rem 0 0;
     padding: 0.6rem 0.8rem;
