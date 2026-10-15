@@ -743,11 +743,27 @@ button {
 }
 
 .init-protocol-caption {
+    width: 100%;
+    max-width: 460px;
+    align-self: center;
+    padding: 1.1rem 1.25rem;
     text-align: center;
-    color: var(--text-main);
-    font-size: 1.1rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
+    color: #33291f;
+    font-size: clamp(1.05rem, 4.2vw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fffaf3, #fff3e2);
+    border: 1px solid #ead2ae;
+    border-top: 3px solid #d89f55;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(119, 80, 32, 0.06);
+    margin-bottom: 0.5rem;
+}
+
+.init-protocol-caption strong {
+    color: #86571f;
+    font-weight: 800;
 }
 
 .init-testimonials-container {
