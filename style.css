@@ -730,17 +730,24 @@ button {
 
 .init-image-wrapper {
     width: 100%;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     display: flex;
     justify-content: center;
 }
 
 .init-ba-image {
     width: 80%;
+    max-width: 360px;
     height: auto;
-    image-rendering: high-quality;
-    /* O brilho extra empurra o lilás clarinho (245) para o branco puro (255) */
-    filter: brightness(1.05) contrast(1.02);
+    border-radius: 12px;
+}
+
+.init-protocol-caption {
+    text-align: center;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
 }
 
 .init-testimonials-container {
