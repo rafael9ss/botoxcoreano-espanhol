@@ -774,8 +774,7 @@ button {
 }
 
 .intro-video-container {
-    width: min(100%, 300px);
-    width: min(100%, max(200px, calc(56.25svh - 185px)), 300px);
+    width: min(calc(100% + 16px), 380px);
     align-self: center;
     border-radius: 16px;
     overflow: hidden;
