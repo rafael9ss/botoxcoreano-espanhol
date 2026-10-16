@@ -71,48 +71,73 @@ function warmCarouselImages() {
 }
 
 // Init sequence for Step 0
-let testimonialInterval;
 let carouselInterval;
+const introVideoId = 'mini-vsl-de-apresentacao-botox-koreano';
+let introVideoActivated = false;
+let introPlaybackReady = false;
+let introPlaybackStart = 0;
 
 function startInitSequence() {
     const appHeader = document.getElementById('appHeader');
     if (appHeader) appHeader.classList.add('hidden');
 
-    initTestimonials();
+    document.addEventListener('vsl:unmute', activateIntroVideo);
+    window.addEventListener('message', trackIntroPlayback);
+    ensureVslStudioLoaded()
+        .then(studio => {
+            const host = document.getElementById('introVsl');
+            if (currentStep === 0 && host) studio.mount(host);
+        })
+        .catch(error => console.error('[intro-vsl]', error));
     warmUpcomingQuizImages();
 }
 
-const testimonials = [
-    { name: "Claudete", age: 52, text: "Seguí el plan durante tres semanas y mi hermana me preguntó si me había hecho bótox. ¡Nunca me había sentido tan bien! ¡Me encantó! 😍❤️" },
-    { name: "Mariana", age: 45, text: "Los masajes son relajantes y el efecto en la firmeza de mi piel es impresionante. ¡Lo recomiendo mucho!" },
-    { name: "Luciana", age: 58, text: "Por fin encontré algo natural que funciona. Las arrugas alrededor de mis ojos se notan menos." }
-];
+function activateIntroVideo(event) {
+    if (event.detail?.videoId !== introVideoId) return;
+    introVideoActivated = true;
+    introPlaybackStart = Math.max(0, Number(event.detail.second) || 0);
+    introPlaybackReady = false;
+}
 
-let currentTestimonialIndex = 0;
+function trackIntroPlayback(event) {
+    if (currentStep !== 0 || !introVideoActivated) return;
+    if (!['https://www.youtube.com', 'https://www.youtube-nocookie.com'].includes(event.origin)) return;
+    const frame = document.getElementById('introVsl')?.shadowRoot?.querySelector('iframe');
+    if (!frame || event.source !== frame.contentWindow) return;
 
-function initTestimonials() {
-    const slider = document.getElementById('initTestimonialSlider');
-    if (!slider) return;
-    
-    function renderTestimonial(index) {
-        const t = testimonials[index];
-        slider.innerHTML = `
-            <div class="init-testimonial-card fade-in">
-                <div class="init-testimonial-header">
-                    <strong>${t.name}, ${t.age} años</strong>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                </div>
-                <p class="init-testimonial-text">"${t.text}"</p>
-            </div>
-        `;
+    let message;
+    try {
+        message = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+    } catch {
+        return;
     }
+    if (!message || typeof message !== 'object') return;
 
-    renderTestimonial(0);
-    
-    testimonialInterval = setInterval(() => {
-        currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
-        renderTestimonial(currentTestimonialIndex);
-    }, 2500);
+    const second = message.event === 'infoDelivery' ? message.info?.currentTime : undefined;
+    // Ignore stale updates from the muted preview until the restart is confirmed.
+    if (Number.isFinite(second) && second >= introPlaybackStart && second <= introPlaybackStart + 2) {
+        introPlaybackReady = true;
+    }
+    if (!introPlaybackReady) return;
+
+    const reachedThirty = Number.isFinite(second) && second - introPlaybackStart >= 30;
+    // Also avoid a dead end if the source clip finishes in less than 30 seconds.
+    const ended = (message.event === 'onStateChange' && message.info === 0)
+        || (message.event === 'infoDelivery' && message.info?.playerState === 0);
+    if (!reachedThirty && !ended) return;
+
+    const action = document.getElementById('introStartAction');
+    if (!action || !action.hidden) return;
+    action.hidden = false;
+    if (action.getBoundingClientRect().bottom > window.innerHeight) {
+        action.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+    }
+}
+
+function stopIntroVideo() {
+    document.removeEventListener('vsl:unmute', activateIntroVideo);
+    window.removeEventListener('message', trackIntroPlayback);
+    document.getElementById('introVsl')?.remove();
 }
 
 // Step Navigation
@@ -163,6 +188,7 @@ function updateStepUI() {
 }
 
 function nextStep(stepNum, key, value) {
+    if (currentStep === 0 && stepNum !== 0) stopIntroVideo();
     if (key && value) {
         userData[key] = value;
     }

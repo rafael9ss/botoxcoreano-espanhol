@@ -54,7 +54,7 @@ End Meta Pixel Code -->
             <p class="step-indicator">Etapa <span id="currentStepNum">1</span> de 10</p>
         </header>
 
-        <!-- Etapa 0: Carregamento e Validação Inicial -->
+        <!-- Etapa 0: Apresentação e início da avaliação -->
         <section class="step active" id="step0">
             <div class="init-header">
                 <img src="assets/botoxdesu.webp" onerror="this.onerror=null;this.src='assets/botoxdesu.jfif'" alt="Quiz Logo" class="init-logo">
@@ -62,17 +62,14 @@ End Meta Pixel Code -->
             <h1 class="init-title">Rejuvenece hasta 10 años en 28 días con el</h1>
             <h2 class="init-subtitle">Bótox Coreano</h2>
             
-            <div class="init-image-wrapper">
-                <img fetchpriority="high" src="assets/antes-despues-protocolo.png" alt="Antes y después" class="init-ba-image">
-            </div>
             <p class="init-protocol-caption">Responde unas preguntas y creamos tu <strong>plan personalizado</strong> en 1 minuto.</p>
 
-            <button type="button" class="primary-btn pulse-anim mt-4" onclick="clearInterval(testimonialInterval); nextStep(1)">Comenzar mi evaluación gratuita</button>
+            <div class="intro-video-container">
+                <div id="introVsl" data-vsl="mini-vsl-de-apresentacao-botox-koreano"></div>
+            </div>
 
-            <div class="init-testimonials-container mt-4">
-                <div class="init-testimonial-slider" id="initTestimonialSlider">
-                    <!-- Dinâmico via JS -->
-                </div>
+            <div class="intro-start-action" id="introStartAction" hidden>
+                <button type="button" class="primary-btn" id="introStartButton" onclick="nextStep(1)">Comenzar mi evaluación gratuita</button>
             </div>
         </section>
 
