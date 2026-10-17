@@ -214,7 +214,7 @@ function startPersonalSummary() {
         const title = document.querySelector('#step9 .loading-view > .step-title');
         title.setAttribute('tabindex', '-1');
         title.focus({ preventScroll: true });
-    }, 5400);
+    }, 7400);
 }
 
 // Loading Sequence for Step 9

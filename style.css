@@ -975,7 +975,7 @@ button {
     margin: 0 auto;
     padding: 0.5rem 0 1.25rem;
     text-align: center;
-    animation: personalExit 260ms cubic-bezier(0.4, 0, 1, 1) 5.1s both;
+    animation: personalExit 260ms cubic-bezier(0.4, 0, 1, 1) 7.1s both;
 }
 
 .personal-emblem {
@@ -1013,7 +1013,7 @@ button {
 .personal-timeline span { display: block; width: 100%; height: 100%; background: var(--gold-gradient); transform-origin: left; }
 .personal-summary:not([hidden]) .personal-conclusion { animation: personalReveal 450ms var(--summary-ease) 3s both; }
 .personal-summary:not([hidden]) .personal-handoff { animation: personalReveal 350ms var(--summary-ease) 3.55s both; }
-.personal-summary:not([hidden]) .personal-timeline span { animation: personalConnect 5.1s linear both; }
+.personal-summary:not([hidden]) .personal-timeline span { animation: personalConnect 7.1s linear both; }
 @keyframes personalReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes personalConfirm { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 @keyframes personalCheck { to { stroke-dashoffset: 0; } }
