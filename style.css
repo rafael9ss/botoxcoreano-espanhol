@@ -964,6 +964,85 @@ button {
     text-align: left;
 }
 
+/* One short, local timeline between the answers and the existing analysis. */
+#step9 .personal-summary[hidden],
+#step9 .loading-view[hidden] { display: none; }
+
+.personal-summary {
+    --summary-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 0.5rem 0 1.25rem;
+    text-align: center;
+    animation: personalExit 260ms cubic-bezier(0.4, 0, 1, 1) 5.1s both;
+}
+
+.personal-emblem {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: #fbf4e9;
+    box-shadow: 0 0 0 7px #fdfaf5;
+    color: #ab7938;
+}
+.personal-emblem svg { width: 100%; height: 100%; }
+.personal-emblem circle { stroke: #dfc69f; stroke-width: 1; }
+.personal-emblem path { stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 36; stroke-dashoffset: 36; }
+.personal-summary:not([hidden]) .personal-emblem path { animation: personalCheck 650ms var(--summary-ease) 150ms both; }
+.personal-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; color: #93692e; margin-bottom: 0.6rem; }
+.personal-summary h1 { font-size: clamp(1.6rem, 6.8vw, 2rem); line-height: 1.14; font-weight: 700; letter-spacing: -0.035em; outline: none; }
+.personal-summary h1 span { display: block; color: #ac7938; }
+.personal-intro { margin: 0.7rem 0 1.65rem; color: #73716b; font-size: 0.9rem; }
+.personal-answers { position: relative; list-style: none; display: grid; gap: 0.8rem; text-align: left; margin: 0; padding: 0; }
+.personal-answers::before { content: ''; position: absolute; left: 35px; top: 25px; bottom: 25px; width: 1px; background: #dfc69f; transform-origin: top; }
+.personal-summary:not([hidden]) .personal-answers::before { animation: personalConnect 2.5s var(--summary-ease) 450ms both; }
+.personal-answers li { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr) 22px; align-items: center; gap: 0.8rem; padding: 1rem 0.95rem; border-radius: 16px; border: 1px solid #efe6d8; background: linear-gradient(115deg, #fff, #fdfaf5); box-shadow: 0 5px 18px rgba(100, 72, 33, 0.045); }
+.personal-summary:not([hidden]) .personal-answers li { animation: personalReveal 520ms var(--summary-ease) var(--reveal-delay) both; }
+.personal-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #f5ecd9; color: #9a6e32; }
+.personal-icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.personal-label { display: block; margin-bottom: 0.25rem; color: #78736b; font-size: 0.73rem; }
+.personal-answers strong { display: block; font-size: 0.95rem; font-weight: 650; line-height: 1.3; overflow-wrap: anywhere; }
+.personal-check { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #e9f4e9; color: #32834a; font-size: 0.8rem; }
+.personal-summary:not([hidden]) .personal-check { animation: personalConfirm 320ms var(--summary-ease) calc(var(--reveal-delay) + 350ms) both; }
+.personal-conclusion { font-size: 0.88rem; line-height: 1.55; color: #68645e; margin: 1.5rem auto 1.1rem; max-width: 340px; }
+.personal-handoff { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.64rem; font-weight: 600; color: #8b7655; }
+.personal-handoff b { margin-left: 0.2rem; font-size: 0.9rem; }
+.personal-timeline { height: 3px; background: #f1eadd; border-radius: 3px; overflow: hidden; margin-top: 0.65rem; }
+.personal-timeline span { display: block; width: 100%; height: 100%; background: var(--gold-gradient); transform-origin: left; }
+.personal-summary:not([hidden]) .personal-conclusion { animation: personalReveal 450ms var(--summary-ease) 3s both; }
+.personal-summary:not([hidden]) .personal-handoff { animation: personalReveal 350ms var(--summary-ease) 3.55s both; }
+.personal-summary:not([hidden]) .personal-timeline span { animation: personalConnect 5.1s linear both; }
+@keyframes personalReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes personalConfirm { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes personalCheck { to { stroke-dashoffset: 0; } }
+@keyframes personalConnect { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.personal-summary:not([hidden]) .personal-timeline span { animation-name: personalTimeline; }
+@keyframes personalTimeline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes personalExit { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-5px); } }
+@media (prefers-reduced-motion: reduce) {
+    .personal-summary, .personal-summary:not([hidden]) * , .personal-summary:not([hidden]) *::before { animation: none !important; }
+    .personal-emblem path { stroke-dashoffset: 0; }
+}
+@media (max-height: 700px) {
+    .personal-summary { padding-top: 0; }
+    .personal-emblem { width: 52px; height: 52px; margin-bottom: 0.8rem; }
+    .personal-intro { margin-bottom: 1.15rem; }
+    .personal-answers li { padding-top: 0.8rem; padding-bottom: 0.8rem; }
+    .personal-conclusion { margin-top: 1.1rem; }
+}
+@media (max-height: 600px) {
+    .personal-emblem { width: 40px; height: 40px; margin-bottom: 0.7rem; }
+    .personal-eyebrow { margin-bottom: 0.4rem; }
+    .personal-summary h1 { font-size: 1.4rem; }
+    .personal-intro { margin: 0.5rem 0 0.85rem; font-size: 0.82rem; }
+    .personal-answers { gap: 0.6rem; }
+    .personal-answers li { grid-template-columns: 36px minmax(0, 1fr) 22px; gap: 0.65rem; padding: 0.65rem 0.8rem; }
+    .personal-icon { width: 36px; height: 36px; }
+    .personal-conclusion { font-size: 0.8rem; line-height: 1.45; margin: 1rem auto 0.8rem; }
+}
+
 .checkout-benefits li {
     position: relative;
     padding: 0.9rem 1rem 0.9rem 2.8rem;

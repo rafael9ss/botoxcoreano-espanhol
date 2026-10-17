@@ -80,6 +80,7 @@ function startInitSequence() {
 // Step Navigation
 function prevStep() {
     if (currentStep > 1) {
+        cancelPersonalSummary();
         document.getElementById(`step${currentStep}`).classList.remove('active');
         currentStep--;
         updateProgress();
@@ -125,6 +126,8 @@ function updateStepUI() {
 }
 
 function nextStep(stepNum, key, value) {
+    if (stepNum === currentStep) return;
+    cancelPersonalSummary();
     if (key && value) {
         userData[key] = value;
     }
@@ -150,7 +153,7 @@ function nextStep(stepNum, key, value) {
     } else if (currentStep === 8) {
         warmCarouselImages();
     } else if (currentStep === 9) {
-        startLoadingSequence();
+        startPersonalSummary();
     } else if (currentStep === 10) {
         warmVslPlayer();
     } else if (currentStep === 11) {
@@ -172,6 +175,46 @@ function updateProgress() {
     if (currentStep <= 10) {
         stepNumEl.innerText = currentStep;
     }
+}
+
+let personalSummaryTimer;
+
+function cancelPersonalSummary() {
+    clearTimeout(personalSummaryTimer);
+    const summary = document.getElementById('personalSummary');
+    if (summary) summary.hidden = true;
+    const loading = document.querySelector('#step9 .loading-view');
+    if (loading) loading.hidden = false;
+}
+
+function startPersonalSummary() {
+    const summary = document.getElementById('personalSummary');
+    const loading = document.querySelector('#step9 .loading-view');
+    const ages = { '20-29': '20–29 años', '30-39': '30–39 años', '40-49': '40–49 años', '50+': '50 años o más' };
+    const focus = { 'Todo el rostro': 'Todo tu rostro', 'Frente': 'La frente', 'Ojos': 'La zona de los ojos', 'Mejillas': 'Las mejillas', 'Cuello': 'El cuello' };
+    const times = { 'Menos de 5 min': 'Menos de 5 minutos al día', '5 a 15 min': 'De 5 a 15 minutos al día', 'Más de 15 min': 'Más de 15 minutos al día' };
+    document.getElementById('personalAge').textContent = ages[userData.idade] || 'No indicada';
+    document.getElementById('personalFocus').textContent = focus[userData.foco] || 'No indicada';
+    document.getElementById('personalTime').textContent = times[userData.tempo] || 'No indicado';
+    loading.hidden = true;
+    summary.hidden = false;
+    document.getElementById('appHeader').classList.add('hidden');
+    document.getElementById('backBtn').classList.add('hidden');
+    warmCarouselImages();
+    warmVslPlayer();
+    warmImage('assets/foto_9.webp');
+    document.getElementById('personalSummaryTitle').focus({ preventScroll: true });
+    personalSummaryTimer = setTimeout(() => {
+        if (currentStep !== 9) return;
+        summary.hidden = true;
+        loading.hidden = false;
+        updateStepUI();
+        startLoadingSequence();
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        const title = document.querySelector('#step9 .loading-view > .step-title');
+        title.setAttribute('tabindex', '-1');
+        title.focus({ preventScroll: true });
+    }, 5400);
 }
 
 // Loading Sequence for Step 9
