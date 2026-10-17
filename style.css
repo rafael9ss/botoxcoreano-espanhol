@@ -914,8 +914,25 @@ button {
 
 #step0.active #introStartButton,
 #checkoutSection:not([hidden]) #checkoutButton {
-    animation: attentionPulse 1.8s ease-in-out infinite;
-    will-change: transform;
+    position: relative;
+    overflow: visible;
+}
+
+#step0.active #introStartButton::after,
+#checkoutSection:not([hidden]) #checkoutButton::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 3px solid #16a34a;
+    border-radius: inherit;
+    pointer-events: none;
+    animation: ctaPulseRing 1.5s ease-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes ctaPulseRing {
+    0% { transform: scale(1); opacity: 0.85; }
+    85%, 100% { transform: scale(1.08, 1.35); opacity: 0; }
 }
 
 @keyframes attentionPulse {
@@ -923,12 +940,18 @@ button {
     50% { transform: scale(1.025); }
 }
 
+@keyframes ctaPulseGlow {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.85; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    #step0.active #introStartButton,
-    #checkoutSection:not([hidden]) #checkoutButton,
-    .pulse-anim {
-        animation: none;
-        will-change: auto;
+    .pulse-anim { animation: none; }
+    #step0.active #introStartButton::after,
+    #checkoutSection:not([hidden]) #checkoutButton::after {
+        animation: ctaPulseGlow 2s ease-in-out infinite;
+        transform: none;
+        will-change: opacity;
     }
 }
 
