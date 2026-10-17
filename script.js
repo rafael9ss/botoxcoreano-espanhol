@@ -198,14 +198,16 @@ function startLoadingSequence() {
     ];
     
     let delay = 0;
+    const sequenceStartedAt = performance.now();
     
     tasks.forEach((task, index) => {
+        const scheduledStart = sequenceStartedAt + delay;
         setTimeout(() => {
             const el = document.getElementById(task.id);
             if (el) el.classList.add('active');
             
             // Animate percentage
-            animatePercentage(el, task.duration);
+            animatePercentage(el, task.duration, scheduledStart);
             
             // If it's the last task, automatically go to step 10 after it finishes
             if (index === tasks.length - 1) {
@@ -258,7 +260,7 @@ function startLoadingSequence() {
                         chat.classList.remove('hidden');
                         chat.style.animation = 'fadeInSlide 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
                     }
-                }, task.duration + 500);
+                }, Math.max(0, scheduledStart + task.duration + 500 - performance.now()));
             }
         }, delay);
         delay += task.duration + 200; // start next slightly after this finishes
@@ -304,27 +306,29 @@ function startCarousel() {
     }, 2000);
 }
 
-function animatePercentage(taskEl, duration) {
+function animatePercentage(taskEl, duration, startedAt = performance.now()) {
+    if (!taskEl) return;
     const pctEl = taskEl.querySelector('.task-pct');
     const barEl = taskEl.querySelector('.task-bar-fill');
-    let start = 0;
-    const end = 100;
-    const interval = 20; 
-    const steps = duration / interval;
-    const increment = end / steps;
-    
-    const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-            start = end;
-            clearInterval(timer);
-            pctEl.innerHTML = '100% <span style="color:#51cf66; margin-left:5px;">✓</span>';
-            if (barEl) barEl.style.width = '100%';
-        } else {
-            pctEl.innerText = Math.floor(start) + '%';
-            if (barEl) barEl.style.width = start + '%';
+    let lastPercent = -1;
+
+    function update(now) {
+        // Elapsed time keeps progress accurate when mobile browsers skip frames.
+        const progress = Math.min(1, Math.max(0, (now - startedAt) / duration));
+        const percent = Math.floor(progress * 100);
+        if (pctEl && percent !== lastPercent) {
+            pctEl.textContent = percent + '%';
+            lastPercent = percent;
         }
-    }, interval);
+        if (barEl) barEl.style.transform = `scaleX(${progress})`;
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else if (pctEl) {
+            pctEl.innerHTML = '100% <span style="color:#51cf66; margin-left:5px;">✓</span>';
+        }
+    }
+
+    requestAnimationFrame(update);
 }
 
 

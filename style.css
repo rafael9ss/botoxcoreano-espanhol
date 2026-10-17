@@ -40,7 +40,6 @@ body {
     height: 200%;
     background: radial-gradient(circle at 50% 50%, #fefefe 0%, #ffffff 40%);
     z-index: -1;
-    animation: rotateBg 30s linear infinite;
 }
 
 @keyframes rotateBg {
@@ -353,7 +352,7 @@ button {
 }
 
 .pulse-anim {
-    animation: pulseBtn 2s infinite;
+    animation: attentionPulse 2s ease-in-out infinite;
 }
 
 @keyframes pulseBtn {
@@ -462,7 +461,7 @@ button {
     position: relative;
     width: 100%;
     max-width: 420px;
-    aspect-ratio: 1448 / 1086; /* Mantém a proporção exata das imagens para evitar cortes */
+    aspect-ratio: 1448 / 1086; /* MantÃ©m a proporÃ§Ã£o exata das imagens para evitar cortes */
     height: auto;
     margin: 0.5rem auto 1.5rem auto;
     border-radius: 16px;
@@ -559,7 +558,7 @@ button {
 .task-text { font-size: 1rem; text-align: left; }
 .task-pct { font-weight: 700; color: #d89f55; }
 .task-bar-container { width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 3px; overflow: hidden; }
-.task-bar-fill { height: 100%; width: 0%; background: var(--gold-gradient); transition: width 0.1s linear; }
+.task-bar-fill { height: 100%; width: 100%; background: var(--gold-gradient); transform: scaleX(0); transform-origin: left center; }
 
 .social-proof-roller {
     margin-top: 3rem;
@@ -913,23 +912,59 @@ button {
     text-decoration: none;
 }
 
+#step0.active #introStartButton,
 #checkoutSection:not([hidden]) #checkoutButton {
-    animation: checkoutButtonPulse 1.8s ease-in-out infinite;
+    animation: attentionPulse 1.8s ease-in-out infinite;
+    will-change: transform;
 }
 
-@keyframes checkoutButtonPulse {
-    0%, 100% {
-        box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
-    }
-    50% {
-        box-shadow: 0 6px 24px rgba(22, 163, 74, 0.65), 0 0 0 8px rgba(22, 163, 74, 0.14);
-    }
+@keyframes attentionPulse {
+    0%, 20%, 100% { transform: scale(1); }
+    50% { transform: scale(1.025); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #checkoutSection:not([hidden]) #checkoutButton {
+    #step0.active #introStartButton,
+    #checkoutSection:not([hidden]) #checkoutButton,
+    .pulse-anim {
         animation: none;
+        will-change: auto;
     }
+}
+
+.checkout-benefits {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    text-align: left;
+}
+
+.checkout-benefits li {
+    position: relative;
+    padding: 0.9rem 1rem 0.9rem 2.8rem;
+    border: 1px solid #dcecdf;
+    border-radius: 12px;
+    background: #f6fbf7;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.checkout-benefits li::before {
+    content: '✓';
+    position: absolute;
+    top: 0.95rem;
+    left: 0.9rem;
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #15803d;
+    font-weight: 800;
 }
 
 #checkoutSection .local-currency-note {
