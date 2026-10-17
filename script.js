@@ -13,10 +13,11 @@ let currentStep = 0;
 
 const warmedImageCache = new Map();
 let vslStudioLoadPromise = null;
+let youtubeApiLoadPromise = null;
 let vslWarmupStarted = false;
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+function initializeQuiz() {
     if (currentStep > 0) {
         updateProgress();
         setTimeout(() => {
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         startInitSequence();
     }
-});
+}
 
 function warmImage(src) {
     const url = new URL(src, document.baseURI).href;
@@ -83,13 +84,42 @@ function startInitSequence() {
 
     document.addEventListener('vsl:unmute', activateIntroVideo);
     window.addEventListener('message', trackIntroPlayback);
-    ensureVslStudioLoaded()
-        .then(studio => {
+    Promise.all([ensureVslStudioLoaded(), ensureYouTubeApiLoaded()])
+        .then(async ([studio]) => {
             const host = document.getElementById('introVsl');
-            if (currentStep === 0 && host) studio.mount(host);
+            if (currentStep === 0 && host) {
+                host.dataset.vsl = introVideoId;
+                await studio.mount(host);
+                watchIntroPlayerReady(host);
+            }
         })
-        .catch(error => console.error('[intro-vsl]', error));
-    warmUpcomingQuizImages();
+        .catch(showIntroVideoError);
+}
+
+function watchIntroPlayerReady(host) {
+    const root = host.shadowRoot;
+    const preview = document.getElementById('introVideoPreview');
+    if (!root) throw new Error('No se pudo preparar el video.');
+    if (!preview) return;
+    const observer = new MutationObserver(update);
+    function update() {
+        const unmute = root.querySelector('.unmute');
+        const failure = root.querySelector('.fail');
+        if ((unmute && !unmute.disabled) || (failure && !failure.hidden)) {
+            preview.hidden = true;
+            observer.disconnect();
+        }
+    }
+    observer.observe(root, { subtree: true, attributes: true, attributeFilter: ['disabled', 'hidden'] });
+    update();
+}
+
+function showIntroVideoError(error) {
+    console.error('[intro-vsl]', error);
+    const preview = document.getElementById('introVideoPreview');
+    if (!preview) return;
+    preview.classList.add('has-error');
+    preview.querySelector('span').textContent = 'No se pudo cargar el video. Recarga la página para volver a intentarlo.';
 }
 
 function activateIntroVideo(event) {
@@ -208,7 +238,9 @@ function nextStep(stepNum, key, value) {
     
     updateStepUI();
     
-    if (currentStep === 8) {
+    if (currentStep === 1) {
+        warmUpcomingQuizImages();
+    } else if (currentStep === 8) {
         warmCarouselImages();
     } else if (currentStep === 9) {
         startLoadingSequence();
@@ -433,6 +465,41 @@ function ensureVslStudioLoaded() {
     return vslStudioLoadPromise;
 }
 
+function ensureYouTubeApiLoaded() {
+    if (window.YT?.Player) return Promise.resolve(window.YT);
+    if (youtubeApiLoadPromise) return youtubeApiLoadPromise;
+
+    youtubeApiLoadPromise = new Promise((resolve, reject) => {
+        const script = document.getElementById('vsl-youtube-iframe-api');
+        const previousReady = window.onYouTubeIframeAPIReady;
+        const cleanup = () => {
+            clearTimeout(timeout);
+            script?.removeEventListener('error', failed);
+        };
+        const failed = () => {
+            cleanup();
+            youtubeApiLoadPromise = null;
+            reject(new Error('No se pudo cargar el video.'));
+        };
+        const timeout = window.setTimeout(failed, 15000);
+        window.onYouTubeIframeAPIReady = () => {
+            try {
+                if (typeof previousReady === 'function') previousReady.call(window);
+            } finally {
+                if (window.YT?.Player) {
+                    cleanup();
+                    resolve(window.YT);
+                } else {
+                    failed();
+                }
+            }
+        };
+        if (!script || script.dataset.failed === 'true') failed();
+        else script.addEventListener('error', failed, { once: true });
+    });
+    return youtubeApiLoadPromise;
+}
+
 // Mount only after the video step is visible so hidden autoplay cannot count down.
 function loadVslPlayer() {
     const container = document.getElementById('vslVideoContainer');
@@ -475,3 +542,6 @@ function updateBaSlider(el) {
         handle.style.left = val + '%';
     }
 }
+
+// This script is at the end of body; do not wait for third-party deferred trackers.
+initializeQuiz();
