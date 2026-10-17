@@ -13,7 +13,6 @@ let currentStep = 0;
 
 const warmedImageCache = new Map();
 let vslStudioLoadPromise = null;
-let youtubeApiLoadPromise = null;
 let vslWarmupStarted = false;
 
 // Initialize
@@ -73,101 +72,9 @@ function warmCarouselImages() {
 
 // Init sequence for Step 0
 let carouselInterval;
-const introVideoId = 'mini-vsl-de-apresentacao-botox-koreano';
-let introVideoActivated = false;
-let introPlaybackReady = false;
-let introPlaybackStart = 0;
-
 function startInitSequence() {
     const appHeader = document.getElementById('appHeader');
     if (appHeader) appHeader.classList.add('hidden');
-
-    document.addEventListener('vsl:unmute', activateIntroVideo);
-    window.addEventListener('message', trackIntroPlayback);
-    Promise.all([ensureVslStudioLoaded(), ensureYouTubeApiLoaded()])
-        .then(async ([studio]) => {
-            const host = document.getElementById('introVsl');
-            if (currentStep === 0 && host) {
-                host.dataset.vsl = introVideoId;
-                await studio.mount(host);
-                watchIntroPlayerReady(host);
-            }
-        })
-        .catch(showIntroVideoError);
-}
-
-function watchIntroPlayerReady(host) {
-    const root = host.shadowRoot;
-    const preview = document.getElementById('introVideoPreview');
-    if (!root) throw new Error('No se pudo preparar el video.');
-    if (!preview) return;
-    const observer = new MutationObserver(update);
-    function update() {
-        const unmute = root.querySelector('.unmute');
-        const failure = root.querySelector('.fail');
-        if ((unmute && !unmute.disabled) || (failure && !failure.hidden)) {
-            preview.hidden = true;
-            observer.disconnect();
-        }
-    }
-    observer.observe(root, { subtree: true, attributes: true, attributeFilter: ['disabled', 'hidden'] });
-    update();
-}
-
-function showIntroVideoError(error) {
-    console.error('[intro-vsl]', error);
-    const preview = document.getElementById('introVideoPreview');
-    if (!preview) return;
-    preview.classList.add('has-error');
-    preview.querySelector('span').textContent = 'No se pudo cargar el video. Recarga la página para volver a intentarlo.';
-}
-
-function activateIntroVideo(event) {
-    if (event.detail?.videoId !== introVideoId) return;
-    introVideoActivated = true;
-    introPlaybackStart = Math.max(0, Number(event.detail.second) || 0);
-    introPlaybackReady = false;
-}
-
-function trackIntroPlayback(event) {
-    if (currentStep !== 0 || !introVideoActivated) return;
-    if (!['https://www.youtube.com', 'https://www.youtube-nocookie.com'].includes(event.origin)) return;
-    const frame = document.getElementById('introVsl')?.shadowRoot?.querySelector('iframe');
-    if (!frame || event.source !== frame.contentWindow) return;
-
-    let message;
-    try {
-        message = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-    } catch {
-        return;
-    }
-    if (!message || typeof message !== 'object') return;
-
-    const second = message.event === 'infoDelivery' ? message.info?.currentTime : undefined;
-    // Ignore stale updates from the muted preview until the restart is confirmed.
-    if (Number.isFinite(second) && second >= introPlaybackStart && second <= introPlaybackStart + 2) {
-        introPlaybackReady = true;
-    }
-    if (!introPlaybackReady) return;
-
-    const reachedThirty = Number.isFinite(second) && second - introPlaybackStart >= 30;
-    // Also avoid a dead end if the source clip finishes in less than 30 seconds.
-    const ended = (message.event === 'onStateChange' && message.info === 0)
-        || (message.event === 'infoDelivery' && message.info?.playerState === 0);
-    if (!reachedThirty && !ended) return;
-
-    const action = document.getElementById('introStartAction');
-    if (!action || !action.hidden) return;
-    action.hidden = false;
-    if (action.getBoundingClientRect().bottom > window.innerHeight) {
-        action.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
-    }
-}
-
-function stopIntroVideo() {
-    document.removeEventListener('vsl:unmute', activateIntroVideo);
-    window.removeEventListener('message', trackIntroPlayback);
-    document.getElementById('introVsl')?.remove();
 }
 
 // Step Navigation
@@ -218,7 +125,6 @@ function updateStepUI() {
 }
 
 function nextStep(stepNum, key, value) {
-    if (currentStep === 0 && stepNum !== 0) stopIntroVideo();
     if (key && value) {
         userData[key] = value;
     }
@@ -240,6 +146,7 @@ function nextStep(stepNum, key, value) {
     
     if (currentStep === 1) {
         warmUpcomingQuizImages();
+        warmVslPlayer();
     } else if (currentStep === 8) {
         warmCarouselImages();
     } else if (currentStep === 9) {
@@ -425,6 +332,8 @@ function animatePercentage(taskEl, duration) {
 function warmVslPlayer() {
     if (vslWarmupStarted) return;
     vslWarmupStarted = true;
+    ensureVslStudioLoaded().catch(() => {});
+    ensureYouTubeApiLoaded().catch(() => {});
 
     fetch('https://vsl-studio3d.vercel.app/api/config/botox-koreano-12-90', { mode: 'cors' })
         .then(response => {
@@ -439,7 +348,16 @@ function ensureVslStudioLoaded() {
     if (vslStudioLoadPromise) return vslStudioLoadPromise;
 
     vslStudioLoadPromise = new Promise((resolve, reject) => {
-        const script = document.getElementById('vsl-studio-embed');
+        let script = document.getElementById('vsl-studio-embed');
+        if (!script) {
+            script = document.createElement('script');
+            script.id = 'vsl-studio-embed';
+            script.src = 'https://vsl-studio3d.vercel.app/e.js';
+            script.async = true;
+            script.onload = () => { script.dataset.loaded = 'true'; };
+            script.onerror = () => { script.dataset.failed = 'true'; };
+            document.head.appendChild(script);
+        }
         const loaded = () => {
             if (window.VslStudio?.mount) {
                 resolve(window.VslStudio);
@@ -465,12 +383,22 @@ function ensureVslStudioLoaded() {
     return vslStudioLoadPromise;
 }
 
+let youtubeApiLoadPromise = null;
+
 function ensureYouTubeApiLoaded() {
     if (window.YT?.Player) return Promise.resolve(window.YT);
     if (youtubeApiLoadPromise) return youtubeApiLoadPromise;
 
     youtubeApiLoadPromise = new Promise((resolve, reject) => {
-        const script = document.getElementById('vsl-youtube-iframe-api');
+        let script = document.getElementById('vsl-youtube-iframe-api');
+        if (!script) {
+            script = document.createElement('script');
+            script.id = 'vsl-youtube-iframe-api';
+            script.src = 'https://www.youtube.com/iframe_api';
+            script.async = true;
+            script.onerror = () => { script.dataset.failed = 'true'; };
+            document.head.appendChild(script);
+        }
         const previousReady = window.onYouTubeIframeAPIReady;
         const cleanup = () => {
             clearTimeout(timeout);
@@ -508,19 +436,19 @@ function loadVslPlayer() {
     if (!mount) {
         mount = document.createElement('div');
         mount.id = 'vslBotoxCoreano';
-        mount.dataset.vsl = 'botox-koreano-12-90';
         container.appendChild(mount);
     }
     if (mount.dataset.vslLoaded === 'true') return;
 
     mount.dataset.vslLoaded = 'true';
 
-    ensureVslStudioLoaded()
-        .then(vslStudio => {
+    Promise.all([ensureVslStudioLoaded(), ensureYouTubeApiLoaded()])
+        .then(([vslStudio]) => {
             if (currentStep !== 11 || container.getBoundingClientRect().width === 0) {
                 mount.dataset.vslLoaded = 'false';
                 return;
             }
+            mount.dataset.vsl = 'botox-koreano-12-90';
             vslStudio.mount(mount);
         })
         .catch(error => {

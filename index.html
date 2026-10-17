@@ -9,10 +9,7 @@
     <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin>
     <link rel="preconnect" href="https://i.ytimg.com" crossorigin>
     <link rel="preconnect" href="https://googlevideo.com" crossorigin>
-    <link rel="preload" as="fetch" href="https://vsl-studio3d.vercel.app/api/config/mini-vsl-de-apresentacao-botox-koreano" crossorigin="anonymous">
-    <link rel="preload" as="image" href="assets/intro-vsl-poster.webp" type="image/webp" fetchpriority="high">
-    <script src="https://vsl-studio3d.vercel.app/e.js" async id="vsl-studio-embed" onload="this.dataset.loaded='true'" onerror="this.dataset.failed='true'"></script>
-    <script src="https://www.youtube.com/iframe_api" async id="vsl-youtube-iframe-api" onerror="this.dataset.failed='true'"></script>
+    <link rel="preload" as="image" href="assets/antes-despues-protocolo.webp" type="image/webp" fetchpriority="high">
     <title>Evaluación Gratuita - Botox Coreano Manual</title>
     <meta name="description" content="Descubre el protocolo ideal para rejuvenecer tu piel con el Botox Coreano Manual.">
     <link rel="stylesheet" href="fonts/fonts.css">
@@ -61,20 +58,13 @@ End Meta Pixel Code -->
             <div class="init-header">
                 <img src="assets/botoxdesu.webp" onerror="this.onerror=null;this.src='assets/botoxdesu.jfif'" alt="Quiz Logo" class="init-logo">
             </div>
-            <h1 class="init-title">Rejuvenece hasta 10 años en 28 días con el</h1>
-            <h2 class="init-subtitle">Bótox Coreano</h2>
-            
-            <p class="init-protocol-caption">Haz clic en el video y <strong>activa el sonido</strong> para ver cómo funciona.</p>
+            <h1 class="init-title">Descubre el <span class="init-subtitle">Botox Coreano Manual</span> ideal para tu rostro, según tu edad</h1>
 
-            <div class="intro-video-container">
-                <div class="intro-video-preview" id="introVideoPreview" role="status">
-                    <img id="introVideoPoster" src="assets/intro-vsl-poster.webp" onerror="this.onerror=null;this.src='assets/intro-vsl-poster.jpg'" width="1280" height="720" fetchpriority="high" decoding="async" alt="Vista previa del video de presentación">
-                    <span>Preparando el video…</span>
-                </div>
-                <div id="introVsl"></div>
+            <div class="init-image-wrapper">
+                <img fetchpriority="high" decoding="async" src="assets/antes-despues-protocolo.webp" onerror="this.onerror=null;this.src='assets/antes-despues-protocolo.png'" width="1174" height="1339" alt="Antes y después" class="init-ba-image">
             </div>
 
-            <div class="intro-start-action" id="introStartAction" hidden>
+            <div class="intro-start-action" id="introStartAction">
                 <button type="button" class="primary-btn" id="introStartButton" onclick="nextStep(1)">Comenzar mi evaluación gratuita</button>
             </div>
         </section>
